@@ -101,7 +101,7 @@ export default function Home() {
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <h1 className="text-3xl md:text-5xl font-light text-gray-900 mb-3">
-            Daily Inspiration
+            Daily Romance
           </h1>
           <p className="text-gray-500 text-sm md:text-base">
             {imageData?.date && formatDate(imageData.date)}
@@ -138,7 +138,7 @@ export default function Home() {
         {/* Footer */}
         <div className="text-center mt-16 md:mt-24">
           <p className="text-gray-400 text-xs md:text-sm">
-            A new inspiration awaits tomorrow
+            A new romance awaits tomorrow
           </p>
         </div>
       </div>

@@ -14,7 +14,7 @@ export async function GET() {
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
       response = await axios.get(csvUrl, {
         headers: {
-          'User-Agent': 'daily-inspiration-app',
+          'User-Agent': 'daily-romance-app',
           'Accept': 'text/csv,text/plain,*/*'
         },
         maxRedirects: 10,
@@ -28,7 +28,7 @@ export async function GET() {
         const csvWithGidUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
         response = await axios.get(csvWithGidUrl, {
           headers: {
-            'User-Agent': 'daily-inspiration-app',
+            'User-Agent': 'daily-romance-app',
             'Accept': 'text/csv,text/plain,*/*'
           },
           maxRedirects: 10,
@@ -42,7 +42,7 @@ export async function GET() {
           const altCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
           response = await axios.get(altCsvUrl, {
             headers: {
-              'User-Agent': 'daily-inspiration-app',
+              'User-Agent': 'daily-romance-app',
               'Accept': 'text/csv,text/plain,*/*'
             },
             maxRedirects: 10,

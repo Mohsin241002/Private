@@ -10,7 +10,7 @@ export async function GET() {
     // Set up headers with authentication if token is provided
     const headers: Record<string, string> = {
       'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'daily-inspiration-app'
+      'User-Agent': 'daily-romance-app'
     };
 
     if (token) {
