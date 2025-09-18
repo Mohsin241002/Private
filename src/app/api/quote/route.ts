@@ -22,7 +22,7 @@ export async function GET() {
         validateStatus: (status) => status < 400
       });
       csvData = response.data;
-    } catch (error) {
+    } catch {
       // Second try: With gid parameter
       try {
         const csvWithGidUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
@@ -36,9 +36,9 @@ export async function GET() {
           validateStatus: (status) => status < 400
         });
         csvData = response.data;
-      } catch (error2) {
-        // Third try: Alternative query format
-        try {
+        } catch {
+          // Third try: Alternative query format
+          try {
           const altCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
           response = await axios.get(altCsvUrl, {
             headers: {
@@ -50,9 +50,9 @@ export async function GET() {
             validateStatus: (status) => status < 400
           });
           csvData = response.data;
-        } catch (error3) {
-          console.error('All Google Sheets access methods failed:', error3);
-          return NextResponse.json({ 
+          } catch (finalError) {
+            console.error('All Google Sheets access methods failed:', finalError);
+            return NextResponse.json({
             error: 'Unable to access Google Sheets. Please ensure the sheet is shared publicly with "Anyone with the link" permissions.' 
           }, { status: 500 });
         }

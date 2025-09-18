@@ -8,7 +8,7 @@ export async function GET() {
     const token = process.env.GITHUB_TOKEN;
 
     // Set up headers with authentication if token is provided
-    const headers: any = {
+    const headers: Record<string, string> = {
       'Accept': 'application/vnd.github.v3+json',
       'User-Agent': 'daily-inspiration-app'
     };
@@ -26,7 +26,7 @@ export async function GET() {
     const files = response.data;
     
     // Filter for image files (jpg, jpeg, png, gif, webp)
-    const imageFiles = files.filter((file: any) => {
+    const imageFiles = files.filter((file: { name: string; download_url: string; size: number }) => {
       const extension = file.name.toLowerCase().split('.').pop();
       return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension || '');
     });

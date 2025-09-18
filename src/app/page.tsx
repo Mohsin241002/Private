@@ -129,7 +129,7 @@ export default function Home() {
           {quoteData && (
             <div className="text-center px-4 md:px-8">
               <blockquote className="text-xl md:text-3xl lg:text-4xl font-light text-gray-900 leading-relaxed max-w-3xl mx-auto">
-                "{quoteData.quote}"
+                &ldquo;{quoteData.quote}&rdquo;
               </blockquote>
             </div>
           )}
