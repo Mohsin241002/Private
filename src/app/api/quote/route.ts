@@ -59,18 +59,63 @@ export async function GET() {
       }
     }
 
-    // Parse CSV data
+    // Parse CSV data with proper handling of quoted fields containing commas
     const lines = csvData.split('\n');
+    
+    // Function to parse a CSV line properly handling quoted fields
+    const parseCSVLine = (line: string): string[] => {
+      const result: string[] = [];
+      let current = '';
+      let inQuotes = false;
+      let i = 0;
+      
+      while (i < line.length) {
+        const char = line[i];
+        
+        if (char === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            // Handle escaped quotes ("")
+            current += '"';
+            i += 2;
+          } else {
+            // Toggle quote state
+            inQuotes = !inQuotes;
+            i++;
+          }
+        } else if (char === ',' && !inQuotes) {
+          // End of field
+          result.push(current.trim());
+          current = '';
+          i++;
+        } else {
+          current += char;
+          i++;
+        }
+      }
+      
+      // Add the last field
+      result.push(current.trim());
+      return result;
+    };
     
     // Parse the CSV and create a map of date -> quote
     const quoteMap = new Map<string, string>();
     const allQuotes: string[] = [];
     
     for (let i = 0; i < lines.length; i++) {
-      const columns = lines[i].split(',');
-      if (columns.length > 1 && columns[0] && columns[1] && columns[1].trim() !== '') {
+      const line = lines[i].trim();
+      if (!line) continue; // Skip empty lines
+      
+      const columns = parseCSVLine(line);
+      if (columns.length >= 2 && columns[0] && columns[1]) {
         const dateKey = columns[0].trim();
-        const quote = columns[1].replace(/^"(.*)"$/, '$1').trim();
+        let quote = columns[1].trim();
+        
+        // Remove surrounding quotes if present
+        if (quote.startsWith('"') && quote.endsWith('"')) {
+          quote = quote.slice(1, -1);
+        }
+        
         if (dateKey && quote) {
           quoteMap.set(dateKey, quote);
           allQuotes.push(quote);
