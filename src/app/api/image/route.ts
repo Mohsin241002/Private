@@ -35,9 +35,11 @@ export async function GET() {
       return NextResponse.json({ error: 'No images found' }, { status: 404 });
     }
 
-    // Get current date and use it as seed for consistent daily selection
+    // Get current date in Indian timezone (IST = UTC+5:30) and use it as seed for consistent daily selection
     const today = new Date();
-    const dateString = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+    const istDate = new Date(today.getTime() + istOffset);
+    const dateString = istDate.toISOString().split('T')[0]; // YYYY-MM-DD format
     
     // Create a simple hash from the date string to get consistent randomness
     let hash = 0;

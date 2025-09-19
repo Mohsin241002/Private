@@ -127,18 +127,20 @@ export async function GET() {
       return NextResponse.json({ error: 'No quotes found' }, { status: 404 });
     }
 
-    // Get current date
+    // Get current date in Indian timezone (IST = UTC+5:30)
     const today = new Date();
-    const dateString = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+    const istDate = new Date(today.getTime() + istOffset);
+    const dateString = istDate.toISOString().split('T')[0]; // YYYY-MM-DD format
     
     // Try to find quote based on day of month
-    const dayOfMonth = today.getDate().toString();
+    const dayOfMonth = istDate.getDate().toString();
     let selectedQuote = quoteMap.get(dayOfMonth);
     
     // If no quote found for today's day of month, try day of year
     if (!selectedQuote) {
-      const startOfYear = new Date(today.getFullYear(), 0, 1);
-      const dayOfYear = Math.floor((today.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      const startOfYear = new Date(istDate.getFullYear(), 0, 1);
+      const dayOfYear = Math.floor((istDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
       selectedQuote = quoteMap.get(dayOfYear.toString());
     }
     
@@ -164,9 +166,9 @@ export async function GET() {
     return NextResponse.json({
       quote: selectedQuote,
       date: dateString,
-      dayOfMonth: today.getDate(),
+      dayOfMonth: istDate.getDate(),
       totalQuotes: allQuotes.length,
-      matchedByDate: quoteMap.has(today.getDate().toString())
+      matchedByDate: quoteMap.has(istDate.getDate().toString())
     });
 
   } catch (error) {
